@@ -3,12 +3,13 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('movie')
+parser.add_argument('pos', type=int)
 args = parser.parse_args()
 
 cap = cv2.VideoCapture(args.movie)
 
 cur = 0
-pos = 8440
+pos = args.pos
 
 while True:
     cap.set(cv2.CAP_PROP_POS_FRAMES, pos)

@@ -10,12 +10,13 @@ import wa_constants
 import wa_utils
 
 parser = argparse.ArgumentParser()
+parser.add_argument('prefix')
 parser.add_argument('-d', '--dir', required=True)
 parser.add_argument('-o', '--output_dir', required=True)
 args = parser.parse_args()
 
 
-def clustering(dir, a, eps=2, save=True):
+def clustering(dir, a, prefix, eps=2, save=True):
     pca = PCA(n_components=100, svd_solver='arpack')
 
     c = [wa_utils.flatten_image(b) for b in a]
@@ -27,7 +28,7 @@ def clustering(dir, a, eps=2, save=True):
     for i, l in enumerate(np.unique(labels)):
         for j in [x for x, r in enumerate(labels) if l == r]:
             if save:
-                cv2.imwrite(f'{dir}/{j}.png', a[j])
+                cv2.imwrite(f'{dir}/{prefix}_{j}.png', a[j])
                 break
     return labels
 
@@ -46,4 +47,4 @@ for file in image_list:
             cropped = im[ry: ry + wa_constants.REAL_PUYO_HEIGHT, rx: rx + wa_constants.REAL_PUYO_WIDTH]
             puyo_image_list.append(cropped)
 
-clustering(args.output_dir, puyo_image_list)
+clustering(args.output_dir, puyo_image_list, args.prefix)

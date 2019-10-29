@@ -1,2 +1,6 @@
 .idea
-local_resources/
+local_resources/*
+resources/*
+
+!.keep
+!resources/rec
