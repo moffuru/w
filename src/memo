@@ -1,0 +1,60 @@
+*盤面認識するモデルの作成
+
+1. 盤面の認識できるところを抽出
+
+結構時間かかる
+
+$ wa_data_generator.py ..\local_resources\_-Ruzm3qzRJjI.mp4 -s 7000 -d ..\local_resources\field_gazou\ --log ..\local_resources\field_gazou\data_generator_log.txt
+
+2. ぷよを切り出す
+
+$ python wa_puyo_data_generator.py -d ..\local_resources\field_gazou\ -o ..\local_resources\puyo_teacher\
+
+3. 教師データを手動で分ける
+
+今は
+  1. 青
+  2. 赤
+  3. 黄
+  4. 緑
+  5. 紫
+  6. おじゃま
+  7. それ以外
+  
+って分けてる
+7 は全消しの画像を含んでいるのだけれど分けたほうが間違いなく良い
+分けたものが `resources/teacher_data`
+
+4. 学習
+
+もし自分が用意したデータセットで学習したいなら resources\puyo_teacher の中身を置き換える
+
+$ python learning.py
+
+結構時間かかる
+
+なんとなく 1..6 か 7 かで判別をしたあと 1..6 のどれかを判別するようにしているんで 2 つモデルが作られる
+
+いい感じなモデルたのむ
+
+5. ぷよ譜生成
+
+2 つ目の引数で与えたファイルに結果がテキストで出力される
+ものすごい時間がかかる
+
+$ python wa_ana.py ..\local_resources\wa.mp4  test.txt ..\resources\model\lsvm_empty.m ..\resources\model\lsvm.m -s 8500
+move=8523
+next=YYRY
+field=                                                                    YB
+move=8549
+next=RYRY
+field=                                                                  YYYB
+move=8574
+next=RYBG
+field=                                                              RY  YYYB
+
+6. puyop の URL 生成
+
+$ python puyop.py test.txt
+
+
